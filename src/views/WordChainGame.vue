@@ -2,30 +2,58 @@
   <div>
     <p>2인이서 하는 끝말잇기 게임</p>
     <div class="input-box">
-      player 1 : <input type="text" :value="player1" />
+      player 1 :
+      <input
+        type="text"
+        v-model="player.player1"
+        @keyup.enter="() => inputWord(player.player1, 'player1')"
+        :disabled="isDisabled['player1']"
+      />
       <br />
-      player 2 : <input type="text" :value="player2" />
+      player 2 :
+      <input
+        type="text"
+        v-model="player.player2"
+        @keyup.enter="() => inputWord(player.player2, 'player2')"
+        :disabled="isDisabled['player2']"
+      />
     </div>
     <div>
-      <b>이전 글자 : </b>
-      <span>{{ lastWord }}</span>
+      <b>이전 글자 : </b><span v-for="(lastWord, idx) in lastWords" :key="idx">{{ lastWord }}<span v-if="idx !== lastWords.length - 1">></span></span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import type { Ref } from 'vue'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'WordChainGame',
   setup() {
-    const player1 = ref('')
-    const player2 = ref('')
-    const lastWord = ref('')
+    const player:Ref<Record<string, string>> = ref({ player1: '', player2: ''})
+    const lastWords:Ref<string[]> = ref([])
+    const isDisabled: Ref<Record<string, boolean>> = ref({ player1: false, player2: true })
+
+    function inputWord(word: string, thisTurn: string) {
+      const players = Object.keys(player.value)
+      players.forEach((turn:string) => isDisabled.value[turn] = thisTurn === turn)
+      player.value[thisTurn] = ''
+      
+      const lastWord = lastWords.value[lastWords.value.length - 1]
+      if (lastWords.value.length > 1 && (lastWord.charAt(lastWord.length - 1) !== word.charAt(0))) {
+        lastWords.value.push(`${players.find(winner => winner !== thisTurn)}가 승리하였습니다!`)
+        isDisabled.value = { player1: true, player2: true }
+        return
+      }
+      
+      lastWords.value.push(word)
+    }
     return {
-      player1,
-      player2,
-      lastWord
+      player,
+      lastWords,
+      inputWord,
+      isDisabled
     }
   }
 })
