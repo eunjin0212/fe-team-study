@@ -1,17 +1,17 @@
 <template>
   <div>
     <div>
-      <button @click="clickValue = 'manual'">수동</button>
       <button @click="clickValue = 'auto'">자동</button>
     </div>
     <div>
-      <auto-lotto v-if="clickValue === 'auto'" @update:modelValue="(auto) => autoLottoNumber = auto" v-model="autoLottoNumber" />
+      <auto-lotto  v-if="clickValue === 'auto'"
+      />
     </div>
     <div>
-      <button @click="getLottoNumber" :disabled="!autoLottoNumber.length">이번주 로또 번호</button>
+      <button @click="getLottoNumber">이번주 로또 번호</button>
       <p>result</p>
       <div style="display: flex; gap: 10px">
-        <span class="ball" v-for="number in resultNumber" :key="number">{{ number }}</span>
+        <span class="ball" v-for="number in lottoNumbers" :key="number">{{ number }}</span>
       </div>
     </div>
   </div>
@@ -20,28 +20,24 @@
 <script lang="ts">
 import { defineComponent, ref, type Ref } from 'vue'
 import AutoLotto from '../components/AutoLotto.vue'
+import generateAutoNumber from '../modules/useRandomNumber'
 
 export default defineComponent({
   components: { AutoLotto },
   name: 'LottoPage',
   setup() {
-    const resultNumber: Ref<number[]> = ref([])
+    const lottoNumbers: Ref<number[]> = ref([])
+    
     function getLottoNumber() {
-      resultNumber.value = []
-      const lottoNumber = () => Math.floor(Math.random() * 44) + 1
-      console.log('ss')
-      setInterval(() => {
-        if (resultNumber.value.length < 6) {
-          resultNumber.value.push(lottoNumber())
-        }
-      }, 300)
+      lottoNumbers.value = []
+      lottoNumbers.value = generateAutoNumber()
+      console.log(generateAutoNumber(), lottoNumbers.value)
     }
-    const autoLottoNumber: Ref<number[]> = ref([])
     return {
-      autoLottoNumber,
       clickValue: ref(''),
-      resultNumber,
-      getLottoNumber
+      lottoNumbers,
+      getLottoNumber,
+      generateAutoNumber
     }
   }
 })
