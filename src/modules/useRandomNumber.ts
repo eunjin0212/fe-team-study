@@ -9,6 +9,7 @@ const generateAutoNumber = (): number[] => {
       }
     }
   }, 300)
+  // promise 사용해서 빼 볼 수 있을 것 같다. 
   setTimeout(() => {
     clearInterval(interval)
   }, 300 * 6 + 100)
