@@ -9,6 +9,11 @@ export const routes = [
     path: '/lotto-game',
     name: 'Lotto',
     component: () => import('@/views/Lotto.vue')
+  },
+  {
+    path: '/rock-scissors-paper',
+    name: 'RockScissorsPaper',
+    component: () => import('@/views/RockScissorsPaper.vue')
   }
 ]
 const router = createRouter({
