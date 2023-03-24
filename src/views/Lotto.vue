@@ -2,7 +2,7 @@
   <div>
     <div>
       <!-- <button @click="clickValue = 'auto'">자동</button> -->
-      <button @click="clickValue = 'manual'">수동</button>
+      <v-btn @click="clickValue = 'manual'">수동</v-btn>
     </div>
     <div>
       <!-- <auto-lotto  v-if="clickValue === 'auto'" /> -->
