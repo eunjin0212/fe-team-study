@@ -14,6 +14,11 @@ export const routes = [
     path: '/rock-scissors-paper',
     name: 'RockScissorsPaper',
     component: () => import('@/views/RockScissorsPaper.vue')
+  },
+  {
+    path: '/tic-tac-toe',
+    name: 'TicTacToe',
+    component: () => import('@/views/TicTacToe.vue')
   }
 ]
 const router = createRouter({

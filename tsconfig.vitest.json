@@ -3,7 +3,8 @@
   "exclude": [],
   "compilerOptions": {
     "composite": true,
-    "lib": [],
+    "lib": ["esnext.array"],
+    "target": "es6",
     "types": ["node", "jsdom", "vuetify"]
   }
 }
