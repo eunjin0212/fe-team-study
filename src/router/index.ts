@@ -19,6 +19,11 @@ export const routes = [
     path: '/tic-tac-toe',
     name: 'TicTacToe',
     component: () => import('@/views/TicTacToe.vue')
+  },
+  {
+    path: '/card-flipping',
+    name: 'CardFlipping',
+    component: () => import('@/views/CardFlipping.vue')
   }
 ]
 const router = createRouter({
