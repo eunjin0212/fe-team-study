@@ -1,7 +1,8 @@
 <template>
-  <v-btn @click="() => {createNewCards(); showCards()}">시작하기</v-btn>
-  <h1>Timer: {{ time }}초</h1>
-  <h3>{{ result }}</h3>
+  <div class="d-flex align-center justify-center" style="gap: 20px;">
+    <v-btn @click="() => {createNewCards(); showCards()}">시작하기</v-btn>
+    <h1>Timer: {{ time }}초</h1><h2>{{ result }}</h2>
+  </div>
   <div class="card-fliped-container">
     <v-card
       v-for="(card, idx) in randomCards"
@@ -24,8 +25,11 @@ export default defineComponent({
   setup() {
     const randomValue = () => Math.floor(Math.random() * 100) + 1
     const randomCards: Ref<Cards[]> = ref([])
+      const time = ref(0)
+
     function createNewCards() {
       randomCards.value = []
+      time.value = 0
       while (randomCards.value.length < 9) {
         const randomNumber = randomValue()
         if (!randomCards.value.some((obj) => obj.value === randomNumber)) {
@@ -38,17 +42,16 @@ export default defineComponent({
         .sort(() => Math.random() - 0.5)
     }
 
-    const time = ref(0)
     const result = ref('')
     function Timer () {
       const setTime = setInterval(() => { 
         time.value++
         if(time.value > 40) {
           clearInterval(setTime)
-          time.value = 0
+          time.value = 40
           if(randomCards.value.some(card => card.flipped === false)) {
             result.value = '실패!'
-            randomCards.value.forEach(card => card.flipped = false)
+            randomCards.value = []
             return
           }
           result.value = '성공!'
