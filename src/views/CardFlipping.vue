@@ -1,4 +1,7 @@
 <template>
+  <v-btn @click="() => {createNewCards(); showCards()}">시작하기</v-btn>
+  <h1>Timer: {{ time }}초</h1>
+  <h3>{{ result }}</h3>
   <div class="card-fliped-container">
     <v-card
       v-for="(card, idx) in randomCards"
@@ -15,7 +18,6 @@ interface Cards {
   value: number
   flipped: boolean
   idx: number
-  matched: boolean
 }
 export default defineComponent({
   name: 'CardFlipping',
@@ -27,7 +29,7 @@ export default defineComponent({
       while (randomCards.value.length < 9) {
         const randomNumber = randomValue()
         if (!randomCards.value.some((obj) => obj.value === randomNumber)) {
-          randomCards.value.push({ value: randomNumber, flipped: false, idx: 0, matched: false })
+          randomCards.value.push({ value: randomNumber, flipped: false, idx: 0 })
         }
       }
       randomCards.value = randomCards.value
@@ -35,7 +37,25 @@ export default defineComponent({
         .map((v, idx) => ({ ...v, idx: idx }))
         .sort(() => Math.random() - 0.5)
     }
-    createNewCards()
+
+    const time = ref(0)
+    const result = ref('')
+    function Timer () {
+      const setTime = setInterval(() => { 
+        time.value++
+        if(time.value > 40) {
+          clearInterval(setTime)
+          time.value = 0
+          if(randomCards.value.some(card => card.flipped === false)) {
+            result.value = '실패!'
+            randomCards.value.forEach(card => card.flipped = false)
+            return
+          }
+          result.value = '성공!'
+        }
+      }, 1000)
+    }
+
     function showCards() {
       const showing = setInterval(() => {
         randomCards.value.forEach((v) => {
@@ -47,11 +67,12 @@ export default defineComponent({
             randomCards.value.forEach((v) => {
               v.flipped = false
             })
+            Timer()
           }, 1000)
         }
       }, 200)
     }
-    showCards()
+
     const previousCard: Ref<Cards | null> = ref(null)
     function flipCard(card: Cards, idx:number) {
       randomCards.value[idx].flipped = !randomCards.value[idx].flipped
@@ -63,7 +84,7 @@ export default defineComponent({
           card.flipped = false
           previousCard.value!.flipped = false
           previousCard.value = null
-        }, 1000)
+        }, 500)
       } else {
         previousCard.value = card
       }
@@ -71,7 +92,11 @@ export default defineComponent({
 
     return {
       randomCards,
-      flipCard
+      flipCard,
+      showCards,
+      createNewCards,
+      time,
+      result,
     }
   }
 })
