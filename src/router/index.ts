@@ -24,6 +24,10 @@ export const routes = [
     path: '/card-flipping',
     name: 'CardFlipping',
     component: () => import('@/views/CardFlipping.vue')
+  },  {
+    path: '/ladder-game',
+    name: 'LadderGame',
+    component: () => import('@/views/LadderGame.vue')
   }
 ]
 const router = createRouter({
