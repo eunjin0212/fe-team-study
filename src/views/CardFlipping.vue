@@ -79,6 +79,10 @@ export default defineComponent({
     const previousCard: Ref<Cards | null> = ref(null)
     function flipCard(card: Cards, idx:number) {
       randomCards.value[idx].flipped = !randomCards.value[idx].flipped
+      if(randomCards.value.every(c => c.flipped)) {
+        result.value = '성공!'
+        return;
+      }
       if (previousCard.value && previousCard.value.flipped && card.value === previousCard.value.value) {
         console.log('match!')
         previousCard.value = null
